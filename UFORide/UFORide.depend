@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1493752769 source:c:\users\thomas\documents\coding\usaco\uforide\main.cpp
+	<iostream>
+	<string>
+
