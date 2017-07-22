@@ -2,6 +2,7 @@
 #include <vector>
 #include <algorithm>
 #include <string>
+#include <fstream>
 
 using namespace std;
 
@@ -44,5 +45,6 @@ int main() {
     int N; string necklace;
     cin >> N >> necklace;
     cout << collection(N, necklace);
+	cout << "Hello, USACO!"; 
     return 0;
 }
