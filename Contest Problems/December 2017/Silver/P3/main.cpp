@@ -1,68 +1,81 @@
 #include <iostream>
 #include <fstream>
+#include <string>
 #include <vector>
-#include <bitset>
-#include <set>
 
-using namespace std; 
+using namespace std;
 
-int N; 
-int succ[100001];
-bitset<1000001> visited;
+// whether node has been visited in DFS check
+bool visited[1000000];
+// working set in this DFS
+int working[1000000];
+// graph
+vector<int> adj[1000000];
+// number of cows
+int numCows;
 
-int occupied = 0;
+int depth = 1;
 
-void unvisit(int node, int counter) {
-	if (counter == 0)
-		return;
-	else {
-		// if (node == 5) cout << "OK" << endl;
-		visited[node] = 0;
-		unvisit(succ[node], counter - 1);
-	}
-}
+int stat = 0;
 
-void DFS(int s, int x, int stepCount) {
-	if (stepCount > N) {
-		unvisit(succ[x], stepCount); // unvisit the nodes that were stepped through, they could still belong to other cycles
-		// cout << "UNVISITING" << endl;
-		return;
-	}
-	if (s == x && stepCount > 0) {
-		// if (s == 5) cout << "OK" << endl;
-		// every node just visited is in the cycle
-		occupied += stepCount; 
-		return;
-	}
-	if (visited[s] == 0) {
-		// if (s == 5) cout << "X: " << x << " " << stepCount + 1 << endl;
-		visited[s] = 1;
-		DFS(succ[s], x, stepCount + 1);
-	}
-	// also no cycle
-	else {
-		unvisit(succ[x], stepCount);
-		// cout << "UNVISITING" << endl;
-		return;
-	}
+void dfs(int n) {
+    cout << "root:" << n << endl;
+    // cout << n << endl;
+    // cout << "-" << working[n] << endl;
+    // if in working set
+    if (working[n] > 0) {
+        stat += depth - working[n];
+        return;
+    }
+
+    if (visited[n]) {
+        return;
+    }
+
+    // mark as visited and part of working set
+    visited[n] = true;
+    working[n] = depth;
+    depth++;
+
+    for (auto a : adj[n]) { // for every neighboring node to this node
+        dfs(a);
+    }
 }
 
 int main() {
-	ifstream fin("shuffle.in");
-	fin >> N; 
-	// store the successor graph
-	for (int i = 1; i <= N; i++) { 
-		fin >> succ[i];
-	}
-	fin.close();
+    string PROBLEM_ID = "shuffle";
+    ifstream fin;
+    fin.open(PROBLEM_ID + ".in");
+    ofstream fout;
+    fout.open(PROBLEM_ID + ".out");
 
-	for (int i = 1; i <= N; i++){ 
-		DFS(i, i, 0);
-	}
+    fin >> numCows; // number of cows
 
-	ofstream fout ("shuffle.out");
-	fout << occupied << "\n";
-	fout.close();
+    int itemp;
 
-	return 0;
+    for (int i = 0; i < numCows; i++) {
+        fin >> itemp;
+        adj[i] = {itemp-1};
+    } // adjacency list created
+
+    // check for cycles in adjacency list
+
+    for (int i = numCows-1; i >= 0; i--) {
+        if (visited[i] == 0) { // if not visited, do a cycle check
+            // reset working set
+            for (int a = 0; a < numCows; a++) {
+                working[a] = 0;
+            }
+            // reset depth
+            depth=1;
+
+            // cout << "root:" << i << endl;
+            dfs(i);
+        }
+    }
+
+    fout << stat << "\n";
+    cout << stat << endl;
+
+    fout.close(); return 0;
 }

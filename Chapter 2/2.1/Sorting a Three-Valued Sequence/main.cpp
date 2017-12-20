@@ -52,6 +52,11 @@ void swapSort() {
 
 	n_exchange += min (a, b);
 
+	// cout << "AFTER 1 & 2 " << n_exchange << endl;
+	// for (auto u : keyValue) 
+	// 	cout << u << " ";
+	// cout << endl;
+
 	// SORT 1's in 3's places with 3's in 1's places
 
 	a = 0; // # 3's in 1's position
@@ -59,13 +64,13 @@ void swapSort() {
 
 	for (int i = 0; i < tally[0]; i++)
 		if (keyValue[i] == 3) a++;
-	for (int i = tally[1]; i < tally[1] + tally[2]; i++) 
+	for (int i = tally[0] + tally[1]; i < N; i++) 
 		if (keyValue[i] == 1) b++;
 
 	for (int i = 0; i < min(a, b); i++) { // number of swaps needed
 		for (int j = 0; j < tally[0]; j++) { 
 			if (keyValue[j] == 3) {
-				for (int k = tally [0] + tally[1]; k < tally[1] + tally[2]; k++) { 
+				for (int k = tally [0] + tally[1]; k < N; k++) { 
 					if (keyValue[k] == 1) { 
 						exchange(j, k);
 					}
@@ -76,6 +81,11 @@ void swapSort() {
 
 	n_exchange += min (a, b);
 
+	// cout << "AFTER 1 & 3 " << n_exchange << endl;
+	// for (auto u : keyValue) 
+	// 	cout << u << " ";
+	// cout << endl;
+
 	// SORT 2's in 3's places with 3's in 2's places
 
 	a = 0; // # 3's in 2's position
@@ -83,13 +93,13 @@ void swapSort() {
 
 	for (int i = tally[0]; i < tally[0] + tally[1]; i++)
 		if (keyValue[i] == 3) a++;
-	for (int i = tally[1]; i < tally[1] + tally[2]; i++) 
+	for (int i = tally[0] + tally[1]; i < N; i++) 
 		if (keyValue[i] == 2) b++;
 
 	for (int i = 0; i < min(a, b); i++) { // number of swaps needed
 		for (int j = tally[0]; j < tally[0] + tally[1]; j++) { 
 			if (keyValue[j] == 3) {
-				for (int k = tally[0] + tally[1]; k < tally[1] + tally[2]; k++) { 
+				for (int k = tally[0] + tally[1]; k < N; k++) { 
 					if (keyValue[k] == 2) { 
 						exchange(j, k);
 					}
@@ -100,12 +110,17 @@ void swapSort() {
 
 	n_exchange += min (a, b);
 
-	cout << n_exchange << endl;
-	for (auto u : keyValue) cout << u << " "; cout << "\n";
+	//cout << "AFTER 2 & 3 " << n_exchange << endl;
+	// for (auto u : keyValue) 
+	// 	cout << u << " ";
+	// cout << endl;
+
+	// cout << n_exchange << endl;
+	// for (auto u : keyValue) cout << u << " "; cout << "\n";
 
 	// SORT the remaining cycles
 
-	for (int i = N - 1; i >= 0; i--) { 
+	for (int i = N - 1; i >= tally[0]; i--) { 
 		if (keyValue[i] == 1) { 
 			for (int j = 0; j < i; j++) { 
 				if (keyValue[j] != 1) { 
@@ -116,6 +131,8 @@ void swapSort() {
 			}
 		}
 	}
+
+	// cout << "AFTER THE ONES " << n_exchange << endl;
 
 	for (int i = N - 1; i >= 0; i--) { 
 		if (keyValue[i] == 2) { 
@@ -128,6 +145,8 @@ void swapSort() {
 			}
 		}
 	}
+
+	// cout << "AFTER EVERYTHING " << n_exchange << endl;
 
 }
 
@@ -142,11 +161,13 @@ int main() {
 	}
 	fin.close();
 
-	for (auto u : keyValue) cout << u << " "; cout << "\n";
+	// cout << tally[0] << " " << tally[1] << " " << tally[2] << endl;
+
+	// for (auto u : keyValue) cout << u << " "; cout << "\n";
 
 	swapSort();
 
-	for (auto u : keyValue) cout << u << " "; cout << "\n";
+	// for (auto u : keyValue) cout << u << " "; cout << "\n";
 
 	ofstream fout("sort3.out");
 	fout << n_exchange << "\n";
