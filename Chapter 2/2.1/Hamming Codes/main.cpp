@@ -1,11 +1,19 @@
+/*
+ID: andreww7
+TASK: hamming
+LANG: C++11
+*/
+
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
+#include <math.h>
 
 using namespace std; 
 
 int N, B, D;
+vector<int> code;
 
 // vector<string> generateBitstring(int length);
 string toBinary(int n);
@@ -13,40 +21,32 @@ int hammingDistance(int a, int b);
 
 int main() { 
 	ifstream fin("hamming.in");
-	fin >> N >> B >> D; 
+	fin >> N >> B >> D; // B only serves to provide an upper bound on the search (2 ^ (B + 1) - 1)
 	fin.close();
 
-	cout << hammingDistance(1364, 564) << endl;
+	code.push_back(0);
+	for (int i = 1; i < pow(2, B + 1); i++) {
+		for (int j = 0; j < code.size(); j++) {
+			if (hammingDistance(i, code[j]) < D)
+				break;
+			if (hammingDistance(i, code[j] >= D) && j == code.size() - 1)
+				code.push_back(i);
+		}
+	}
 
-	// ofstream fout("hamming.in");
-	// for (int i = 0; i < N / 10; i++) {
-	// 	for (int j = 0; j < 10; j++) {
-	// 		cout << codeword[10*i + j] << " ";
-	// 	}
-	// }
-	// for (int i = 10 * (N / 10); i < N; i++) {
-	// 	cout << codeword[i] << " ";
-	// }
-	// fout.close();
+	ofstream fout("hamming.out");
+	for (int i = 0; i < N / 10; i++) {
+		for (int j = 0; j < 9; j++) {
+			fout << code[10*i + j] << " ";
+		}
+		fout << code[10*i + 9] << "\n";
+	}
+	for (int i = 10 * (N / 10); i < N - 1; i++)
+		fout << code[i] << " ";
+	if (N % 10 != 0) fout << code[N - 1] << "\n";
+	fout.close();
 	return 0;
 }
-
-
-// vector<string> generateBitstring(int length) {
-// 	vector<string> x;
-// 	if (length == 1) {
-// 		x.push_back("1");
-// 		x.push_back("0");
-// 		return x;
-// 	}
-
-// 	vector<string> y = generateBitstring(length - 1);
-// 	for (int i = 0; i < y.size(); i++) {
-// 		x.push_back(y[i] + "1");
-// 		x.push_back(y[i] + "0");
-// 	}
-// 	return x; 
-// }
 
 int hammingDistance(int a, int d) {
 	// assume a and b are bitstrings
