@@ -44,7 +44,6 @@ long long solve() {
 		return 0;
 
 	for (int i = 2; i <= N; i++){
-		cout << i << ": ";
 		int sum = i * (i + 1) / 2;
 		for (int j = 0; j <= sum; j++) {
 			if (j != 0) {
@@ -52,12 +51,10 @@ long long solve() {
 					dp[i][j] = dp[i - 1][i + j] + 
 							   dp[i - 1][abs(i - j)];
 				else 
-					dp[i][j] = 2 * dp[i - 1][abs(i - j)];
+					dp[i][j] = dp[i - 1][i + j] + 2 * dp[i - 1][abs(i - j)];
 			} else 
 				dp[i][j] = dp[i - 1][i];
-			cout << dp[i][j] << " ";
 		}
-		cout << endl;
 	}
 
 	return dp[N][0];
