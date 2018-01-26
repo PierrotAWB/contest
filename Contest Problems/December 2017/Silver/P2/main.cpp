@@ -1,130 +1,160 @@
-#include <iostream>
+#include <algorithm>
+#include <bitset>
 #include <fstream>
+#include <iostream>
+#include <map>
+#include <math.h>
+#include <set>
 #include <string>
 #include <tuple>
-#include <deque>
-#include <algorithm>
-#include <set>
-#include <map>
+#include <vector>
 
 using namespace std; 
 
-int N, G, maxProd = -1;
+struct entry {
+	int day;
+	int id; 
+	string delta;
+};
 
-int displayChangeCounter = 0;
+bool comp(entry a, entry b);
+void process(entry a);
+bool shouldChangeDisplay(entry a);
 
-deque<tuple<int, int, string> > entry; 
-set<int> pLevel; 
-map<int, int> production;
+int N, G, maxProd, n_changes = 0;
 
-set<int> winner;
-
-bool comp(tuple<int, int, string> a, tuple<int, int, string> b);
-void processEntry(int, int, string);
-set<int> trackChange();
-void updateMaxProd(); 
+vector<entry> logBook;
+map<int, int, greater<int> > cow; /// maps ID to production level
+set<int> winner; // set of cow winners
 
 int main() {
+	// handle input
 	ifstream fin("measurement.in");
 	fin >> N >> G;
-	for (int i = 0; i < N; i++) {
+	for (int i = 0; i < N; i++)
+	{
 		int day, id; 
 		string delta; 
-		fin >> day >> id >> delta;
-		production[id] = G;
+		entry Entry; 
+
+		fin >> day >> id >> delta; 
+		
+		Entry.day = day; Entry.id = id; Entry.delta = delta;
+		cow[id] = G;
 		winner.insert(id);
-		entry.push_back(make_tuple(day, id, delta));
+		logBook.push_back(Entry);
 	}
 	fin.close();
-
-	production[-2] = G; // represents any cows that aren't mentioned in the logs
+	cow[-2] = G; // to represent the other cows
 	winner.insert(-2);
 
-	sort(entry.begin(), entry.end(), comp);
-	pLevel.insert(G);
+	maxProd = G; // this is the current best level of production across all cows
+	sort(logBook.begin(), logBook.end(), comp);
 
-	// process the entries on a per-day basis; then track changes to winners
-	while (!entry.empty()) {
-		auto logEntry = entry.front(); // marks the start of a new day
-		int i = 0, currentDay = get<0> (logEntry);
-		while (get<0> (entry[i]) == currentDay) {
-			// cout << i << " " << currentDay << endl;
-			int day = get<0> (entry[i]), id = get<1> (entry[i]);
-			string delta = get<2> (entry[i]);
-			processEntry(day, id, delta);
-			updateMaxProd();
-			i++;
+	for (int i = 0; i < N; i++) {
+		process(logBook[i]);
+
+		for (auto u : cow) {
+			cout << u.second << " ";
 		}
-		if (winner != trackChange()) {
-			displayChangeCounter++;
-			winner = trackChange();
-		}
-		for (int j = 0; j < i; j++)
-			entry.pop_front(); // pop as many logs off as were processed
+
+		cout << logBook[i].day << " " << logBook[i].id << " " << logBook[i].delta << endl;
+
+		// cout << shouldChangeDisplay(logBook[i]) << " " << n_changes << endl;
+		if (shouldChangeDisplay(logBook[i])) n_changes++;
 	}
 
-	// for (auto u : entry) {
-	// 	cout << get<0> (u) << " " << get<1> (u) << " " << get<2> (u) << "\n";
-	// }
-
-	ofstream fout("measurement.out");
-	fout << displayChangeCounter << "\n";
+	ofstream fout("measurement.out"); 
+	fout << n_changes << "\n";
 	fout.close();
-
 	return 0;
 }
 
-bool comp(tuple<int, int, string> a, tuple<int, int, string> b) {
-	// sort by day number
-	return get<0> (a) < get<0> (b);
+bool comp(entry a, entry b) {
+	return a.day < b.day;
 }
 
-void processEntry(int day, int id, string delta) {
+// update the cow map according to the changes documented in the logbook
+void process(entry a) { 
 	bool shouldAdd; 
-	int change = stoi(delta.substr(1, delta.length() - 1));
-	switch (delta.at(0)) {
-		case '+': shouldAdd = 1;
-				  break;
-		default: 
-				  shouldAdd = 0;
+	int change; 
+
+	if (a.delta.at(0) == '+') shouldAdd = true;
+	else shouldAdd = false;
+
+	change = stoi(a.delta.substr(1, a.delta.length() - 1));
+
+	if (shouldAdd) {
+		cow[a.id] += change;
+	} else {
+		cow[a.id] -= change;
+	}
+}
+
+// the motivation behind this method is the fact that
+// every time a log is processed, Farmer John's painting display
+// will either change, or it won't.
+bool shouldChangeDisplay(entry a) {
+	if (cow[a.id] == maxProd){ // it must have come from below
+		// cout << "EQUAL " << endl;
+		winner.insert(a.id);
+		return true;
 	}
 
-	if (shouldAdd)
-		production[id] += change; 
-	else {
-		int temp = production[id];
-		bool newMaxNeeded = true;
-		production[id] -= change;
-		// check to see if the max has changed
-
-		for (auto u : production)
-			if (u.second == temp) {
-				newMaxNeeded = false;
-				break;
-			}
-
-		if (newMaxNeeded) {
-			pLevel.erase(temp);
+	if (cow[a.id] > maxProd){ // lone wolf
+		// cout << "GREATER " << endl;
+		maxProd = cow[a.id];
+		if (winner.size() == 1 && winner.count(a.id) > 0) { // the lone wolf was already winning; he continues to beast
+			return false;
+		} else { // a lone wolf pulls ahead
+			winner.clear();
+			winner.insert(a.id);
+			return true;
 		}
 	}
 
+	if (cow[a.id] < maxProd) {
+		// cout << "LESS THAN " << endl;
+		if (winner.count(a.id) == 0) { // wasn't in winning group anyway
+			return false;
+		}
 
-	if (pLevel.find(production[id]) == pLevel.end()) // new production formed; insert it
-		pLevel.insert(production[id]);
-}
+		 else {
+			// the cow changed was formerly a winner;
+			// could be a lone wolf (above everyone else) or with the group
+			if (winner.size() == 1) {
+				// perhaps the lone wolf dropped below others:
+				int newMax = -1000;
 
-set<int> trackChange() {
-	set<int> currentWinner;
+				// find the maximum after the winner decreases
+				for (auto u : cow)
+					if (u.second > newMax)
+						newMax = u.second;
 
-	for (auto u : production)
-		if (u.second == maxProd)
-			currentWinner.insert(u.first);
+				int winnerCount = 0;
+				set<int> newWinner;
 
-	return currentWinner;
-}
+				for (auto u : cow)
+					if (u.second == newMax){
+						winnerCount++;
+						newWinner.insert(u.first);
+					}
 
-void updateMaxProd() {
-	auto it = pLevel.end(); 
-	it--;
-	maxProd = *it;
+				maxProd = newMax;
+				
+				if (newWinner == winner) { // lone wolf continues to win
+					return false;
+				} else {
+					winner = newWinner;
+					return true;
+				}
+
+			} else {
+				return true; // dropped out of the winner's circle
+			}
+		}
+
+	}
+
+	return false;
 }
