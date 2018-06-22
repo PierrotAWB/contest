@@ -17,46 +17,39 @@
 # if 
 
 import time
+from decimal import *
+
+getcontext().prec = 10
+
 it = time.time()
-l = {}
+t = 0
 UPPER_BOUND = 333333334
 # {s, s, s + 1}
 for s in range(2, UPPER_BOUND):
- 	if s % 10000 == 0: 
+ 	if s % 100000 == 0: 
  		print s
- 	if s in l: continue
- 	if ((s+1) * ((3*s+1)*(s-1)) ** 0.5) % 4 == 0:
- 		l[s] = True
- 		t = 2
- 		while True:
- 			if t*s < UPPER_BOUND:
- 				l[t*s] = True
- 				t += 1
- 			else:
- 				break
+ 	if (((3*s+1)/float(2) * (s+1)/float(2) * (s+1)/float(2) * (s-1)/float(2))**0.5) % 1 == 0:
+ 		t += 3*s+1
+ 	if (((3*s-1)/float(2) * (s-1)/float(2) * (s-1)/float(2) * (s+1)/float(2))**0.5) % 1 == 0:
+ 		t += 3*s-1
+print t, time.time() - it
 
-ans = 0
-for side in l:
-	ans += 3*side + 1
+# shorter = 5 #(two of them)
 
-l.clear()
+# if ((shorter+1) * ((3*shorter+1)*(shorter-1)) ** 0.5) % 4 == 0:
+# 	print ((shorter+1) * ((3*shorter+1)*(shorter-1)) ** 0.5) / float(4), 3*shorter + 1
+# else: 
+# 	print "non-integral"
 
-# {s, s, s - 1}
-for s in range(2, UPPER_BOUND):
- 	if s % 10000 == 0: 
- 		print s
- 	if s in l: continue
- 	if ((s-1) * ((3*s-1)*(s+1)) ** 0.5) % 4 == 0:
- 		l[s] = True
- 		t = 2
- 		while True:
- 			if t*s < UPPER_BOUND:
- 				l[t*s] = True
- 				t += 1
- 			else:
- 				break
+# if ((shorter-1) * ((3*shorter-1)*(shorter+1)) ** 0.5) % 4 == 0:
+# 	print ((shorter-1) * ((3*shorter-1)*(shorter+1)) ** 0.5) / float(4), 3*shorter - 1
+# else: 
+# 	print "non-integral"
 
-for side in l:
-	ans += 3*side - 1
 
-print ans, "Execution time:", time.time() - it, "seconds."
+# 1080838249033
+# 1081921351635
+
+348453
+
+
