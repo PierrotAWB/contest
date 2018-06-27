@@ -16,22 +16,31 @@
 # Either way, we can modify a sieve to perform this: 
 # if 
 
-import time
+import time, math
 from decimal import *
 
-getcontext().prec = 10
+
 
 it = time.time()
 t = 0
-UPPER_BOUND = 333333334
+UPPER_BOUND = 333333
 # {s, s, s + 1}
-for s in range(2, UPPER_BOUND):
- 	if s % 100000 == 0: 
- 		print s
- 	if (((3*s+1)/float(2) * (s+1)/float(2) * (s+1)/float(2) * (s-1)/float(2))**0.5) % 1 == 0:
- 		t += 3*s+1
- 	if (((3*s-1)/float(2) * (s-1)/float(2) * (s-1)/float(2) * (s+1)/float(2))**0.5) % 1 == 0:
- 		t += 3*s-1
+for s in range(2, UPPER_BOUND+1):
+	getcontext().prec = 15
+ 	se = Decimal(1.5)*s + Decimal(0.5)
+ 	if s == 302828: 
+ 		getcontext().prec = 30
+ 		print (se*(se - s)*(se - s)*(se - s - 1))**0.5
+
+ 	if ((se*(se - s)*(se - s)*(se - s - 1))**0.5) % 1.0 == 0.0:
+ 		t += 2*se
+ 		print s, s, s+1
+
+ 	se -= 1
+
+ 	if ((se*(se - s)*(se - s)*(se - s + 1))**0.5) % 1.0 == 0.0:
+ 		t += 2*se
+ 		print s, s, s-1
 print t, time.time() - it
 
 # shorter = 5 #(two of them)
