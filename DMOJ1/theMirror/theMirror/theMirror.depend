@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1498966129 source:c:\users\thomas\desktop\development\dmoj\themirror\themirror\main.cpp
+	<iostream>
+	<cmath>
+

@@ -1,0 +1,23 @@
+[main] AL-DFS 1000 (0) exception: trapped!
+[main] AL-DFS 1000 (0) exception: code 0xC0000005 at 0x6105AFA1
+[main] AL-DFS 1000 (0) exception: ax 0x39006F66 bx 0x415283 cx 0x65707974 dx 0x39006F66
+[main] AL-DFS 1000 (0) exception: si 0x2400 di 0x412E83 bp 0x247FCE0 sp 0x247FCB4
+[main] AL-DFS 1000 (0) exception: exception is: STATUS_ACCESS_VIOLATION
+[main] AL-DFS 1000 (0) stack: Stack trace:
+[main] AL-DFS 1000 (0) stack: frame 0: sp = 0x247F6C0, pc = 0x6100A2C3
+[main] AL-DFS 1000 (1) stack: frame 1: sp = 0x247F6FC, pc = 0x77E12D72
+[main] AL-DFS 1000 (0) stack: frame 2: sp = 0x247F720, pc = 0x77E12D44
+[main] AL-DFS 1000 (0) stack: frame 3: sp = 0x247F7EC, pc = 0x77E008EF
+[main] AL-DFS 1000 (0) stack: frame 4: sp = 0x247FCE0, pc = 0x6101A4A7
+[main] AL-DFS 1000 (0) stack: frame 5: sp = 0x247FCF0, pc = 0x406B2D
+[main] AL-DFS 1000 (0) stack: frame 6: sp = 0x247FD00, pc = 0x406D7B
+[main] AL-DFS 1000 (0) stack: frame 7: sp = 0x247FD24, pc = 0x408465
+[main] AL-DFS 1000 (0) stack: frame 8: sp = 0x247FD3C, pc = 0x405AA8
+[main] AL-DFS 1000 (0) stack: frame 9: sp = 0x247FD50, pc = 0x407066
+[main] AL-DFS 1000 (0) stack: frame 10: sp = 0x247FD68, pc = 0x407085
+[main] AL-DFS 1000 (0) stack: frame 11: sp = 0x247FD70, pc = 0x404B20
+[main] AL-DFS 1000 (0) stack: frame 12: sp = 0x247FD78, pc = 0x6100339A
+[main] AL-DFS 1000 (0) stack: frame 13: sp = 0x247FD88, pc = 0x6105A11D
+[main] AL-DFS 1000 (0) stack: frame 14: sp = 0x247FD9C, pc = 0x61004408
+[main] AL-DFS 1000 (0) stack: frame 15: sp = 0x247FF48, pc = 0x61004420
+[main] AL-DFS 1000 (0) stack: End of stack trace (more stack frames may be present)

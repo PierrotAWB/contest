@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1498451369 source:c:\users\thomas\desktop\development\dmoj\shahirpromgraph\al-dfs\main.cpp
+	<iostream>
+	<vector>
+	<map>
+	<algorithm>
+

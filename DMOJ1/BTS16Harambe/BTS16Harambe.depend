@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1495492507 source:c:\users\thomas\desktop\development\dmoj\bts16harambe\main.cpp
+	<iostream>
+	<string>
+	<algorithm>
+

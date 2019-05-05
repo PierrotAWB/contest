@@ -1,0 +1,20 @@
+[main] BTS16Harambe 1000 (0) exception: trapped!
+[main] BTS16Harambe 1000 (0) exception: code 0xC0000005 at 0x417137
+[main] BTS16Harambe 1000 (0) exception: ax 0x248FD74 bx 0x248FD74 cx 0x41B024 dx 0x0
+[main] BTS16Harambe 1000 (0) exception: si 0xA031F00 di 0x248FD58 bp 0x248FD34 sp 0x248FD34
+[main] BTS16Harambe 1000 (0) exception: exception is: STATUS_ACCESS_VIOLATION
+[main] BTS16Harambe 1000 (0) stack: Stack trace:
+[main] BTS16Harambe 1000 (0) stack: frame 0: sp = 0x248F740, pc = 0x6100A2C3
+[main] BTS16Harambe 1000 (0) stack: frame 1: sp = 0x248F77C, pc = 0x77852D72
+[main] BTS16Harambe 1000 (1) stack: frame 2: sp = 0x248F7A0, pc = 0x77852D44
+[main] BTS16Harambe 1000 (0) stack: frame 3: sp = 0x248F86C, pc = 0x778408EF
+[main] BTS16Harambe 1000 (0) stack: frame 4: sp = 0x248FD34, pc = 0x401106
+[main] BTS16Harambe 1000 (0) stack: frame 5: sp = 0x248FDA4, pc = 0x61004402
+[main] BTS16Harambe 1000 (0) stack: frame 6: sp = 0x248FF48, pc = 0x61004420
+[main] BTS16Harambe 1000 (0) stack: frame 7: sp = 0x248FF54, pc = 0x41630A
+[main] BTS16Harambe 1000 (0) stack: frame 8: sp = 0x248FF64, pc = 0x40103A
+[main] BTS16Harambe 1000 (0) stack: frame 9: sp = 0x248FF80, pc = 0x749A62C4
+[main] BTS16Harambe 1000 (0) stack: frame 10: sp = 0x248FF94, pc = 0x77830FD9
+[main] BTS16Harambe 1000 (0) stack: frame 11: sp = 0x248FFDC, pc = 0x77830FA4
+[main] BTS16Harambe 1000 (0) stack: frame 12: sp = 0x248FFEC, pc = 0x0
+[main] BTS16Harambe 1000 (0) stack: End of stack trace

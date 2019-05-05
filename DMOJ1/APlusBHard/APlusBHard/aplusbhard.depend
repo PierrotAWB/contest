@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1495486338 source:c:\users\thomas\desktop\development\dmoj\aplusbhard\aplusbhard\main.cpp
+	<iostream>
+	<string>
+	<math.h>
+	<algorithm>
+

@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1495398311 source:c:\users\thomas\desktop\development\dmoj\nextprime\nextprime\main.cpp
+	<iostream>
+	<math.h>
+
