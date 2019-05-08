@@ -42,14 +42,6 @@ double distance(Point p, Point q) {
 int main()
 {
 	fscanf(fin, "%d", &N);	
-	// Greedy approach: we shall assume the best edge to add is the 
-	// one which adds the least length.
-	int b1 = 0, b2 = 151;
-	
-	Point p1, p2;
-	p1.x = 0; p2.x = INF;
-	p1.y = 0; p2.y = INF;
-	pasture[b1] = p1; pasture[b2] = p2;
 
 	for (int i = 1; i <= N; ++i) {
 		Point p;
@@ -66,70 +58,34 @@ int main()
 			fscanf(fin, "%c ", &t);
 			if (i == j) dist[i][j] = 0;
 			else if (t == '1') dist[i][j] = distance(pasture[i], pasture[j]);
-			else {
-				dist[i][j] = INF;
-				if (distance(pasture[i], pasture[j]) < distance(pasture[b1], pasture[b2])) {
-					b1 = i;
-					b2 = j;
-				}
-			}
+			else dist[i][j] = INF;
 		}
 	}
 
 	// Floyd-Warshall
-	// for (int k = 1; k <= N; ++k) {
-	// 	for (int i = 1; i <= N; ++i) {
-	// 		for (int j = 1; j <= N; ++j) {
-	// 			dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
-	// 		}
-	// 	}
-	// }
-
-	double diameter = 0;
-
-	// // TOO INEFFICIENT!
-	// for (int i = 1; i <= N; ++i) {
-	// 	for (int j = i + 1; j <= N; ++j) {
-	// 		// Current edge does not exist; recompute shortest paths with the edge added
-	// 		if (dist[i][j] == INF) {
-	// 			double tmp[151][151];
-	// 			for (int p = 1; p <= N; ++p)
-	// 				for (int q = 1; q <= N; ++q) 
-	// 					tmp[p][q] = dist[p][q];
-
-	// 			tmp[i][j] = distance(pasture[i], pasture[j]);
-	// 			tmp[j][i] = distance(pasture[i], pasture[j]);
-	// 			double tmpDiam = 0;	
-
-	// 			for (int k = 1; k <= N; ++k) {
-	// 				for (int s = 1; s <= N; ++s) {
-	// 					for (int t = 1; t <= N; ++t) {
-	// 						tmp[s][t] = min(tmp[s][t], tmp[s][k] + tmp[k][t]);
-	// 						if (tmp[s][t] != INF) tmpDiam = max(tmpDiam, tmp[s][t]);
-	// 					}
-	// 				}
-	// 			}
-
-	// 			// We would like to determine the "optimal" edge to add, 
-	// 			// where, by "optimal", we mean yielding least graph diameter
-	// 			diameter = min(diameter, tmpDiam);
-	// 		} 
-	// 	}		
-	// }
-	// cout << b1 << " " << b2 << endl;
-
-	dist[b1][b2] = distance(pasture[b1], pasture[b2]);
-	dist[b2][b1] = distance(pasture[b1], pasture[b2]);
-
 	for (int k = 1; k <= N; ++k) {
-		for (int s = 1; s <= N; ++s) {
-			for (int t = 1; t <= N; ++t) {
-				dist[s][t] = min(dist[s][t], dist[s][k] + dist[k][t]);
-				if (dist[s][t] != INF) diameter = max(diameter, dist[s][t]);
+		for (int i = 1; i <= N; ++i) {
+			for (int j = 1; j <= N; ++j) {
+				dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
 			}
 		}
 	}
 
+	double diameter = INF;
+
+	for (int i = 1; i <= N; ++i) {
+		for (int j = i + 1; j <= N; ++j) {
+			if (dist[i][j] != INF) continue;
+			// Find the longest (non-infinite) distances to pasture i and pasture j
+			// When they are joined, their edge is the ONLY one which connects the two groups of pastures.
+			double l1 = 0, l2 = 0;
+			for (int k = 1; k <= N; ++k) {
+				if (dist[i][k] != INF && dist[i][k] > l1) l1 = dist[i][k];
+				if (dist[j][k] != INF && dist[j][k] > l2) l2 = dist[j][k];
+			}
+			diameter = min(diameter, l1 + distance(pasture[i], pasture[j]) + l2);
+		}		
+	}
 
 /** 	Print the adjacency matrix */
 
