@@ -34,7 +34,7 @@ struct Point {
 
 int N; 
 double dist[151][151];
-double diameter[151];
+double diam[151];
 Point pasture[151];
 
 double distance(Point p, Point q) {
@@ -73,15 +73,42 @@ int main()
 		}
 	}
 
-	/** 	Print the adjacency matrix */
-	// ofstream fout("cowtour.out");
-	// for (int i = 1; i <= N; ++i) {
-	// 		for (int j = 1; j <= N; ++j) {
-	// 			if (dist[i][j] == INF) fout << "*      ";
-	// 			else fout << dist[i][j] << "      ";
-	// 		}
-	// 	fout << endl;
-	// }
+	/** Populate the diam array */
+	/** Note that we compute it only ONCE; and that we do so before we
+	 * test edges to add in */
+
+	bool visited[151] = {0};
+	for (int i = 1; i <= N; ++i) {
+			if (visited[i]) 
+				continue;
+			set<int> connected;
+			queue<int> q; 
+
+			q.push(i);
+			while(!q.empty()) {
+				int t = q.front();
+				q.pop();
+				if (visited[t]) continue;
+				visited[t] = true;
+				for (int j = 1; j <= N; ++j) {
+					if (dist[t][j] != INF && dist[t][j] != 0) {
+						connected.insert(j);
+						q.push(j);
+					}
+				}
+			}
+
+			double currentDiameter = 0;
+			for (auto u : connected) {
+				for (auto v : connected) {
+					currentDiameter = max(currentDiameter, dist[u][v]);
+				}
+			}
+
+			for (auto u : connected) {
+				diam[u] = currentDiameter;
+			}
+	}
 
 	double diameter = INF;
 
@@ -98,75 +125,12 @@ int main()
 
 			/** longest distance within pasture[i]'s group + that of pasture[j]'s group, + 
 			 * the distance between pasture[i] and pasture[j] */
-
 			double d1 = l1 + distance(pasture[i], pasture[j]) + l2; 
 
-			// COMPUTING d2 IS FAR TOO SLOW IN THE WORST CASE (the graph is very dense)
-
-
 			/** the maximum of the diameter of pasture[i]'s group and that of pasture[j] */
-			double d2 = INF, dimI = 0, dimJ = 0;
-
-			set<int> connected;
+			double d2 = INF;
+			d2 = max(diam[i], diam[j]);
 			
-			bool visited[151];
-			queue<int> q;
-			q.push(i);
-			while(!q.empty()) {
-				int t = q.front();
-				q.pop();
-				if (visited[t]) continue;
-				visited[t] = true;
-				for (int k = 1; k <= N; ++k) {
-					if (dist[t][k] != INF) {
-						connected.insert(k); 
-						q.push(k);
-					}
-				}
-			}
-			// for (auto u : connected) cout << u << " ";
-			vector<int> vc;
-
-			for (auto u : connected) 
-				vc.push_back(u);
-			
-			int l = vc.size();
-			
-			for (int k = 0; k < l; ++k) {
-				for (int m = k + 1; m < l; ++m) {
-					dimI = max(dimI, dist[vc[k]][vc[m]]); 
-				}
-			}
-
-			for (int k = 1; k <= N; ++k) visited[k] = false;
-			connected.clear();
-			vc.clear();
-			q.push(j);
-			while(!q.empty()) {
-				int t = q.front();
-				q.pop();
-				if (visited[t]) continue;
-				visited[t] = true;
-				for (int k = 1; k <= N; ++k) {
-					if (dist[t][k] != INF) {
-						connected.insert(k); 
-						q.push(k);
-					}
-				}
-			}		
-
-			for (auto u : connected) 
-				vc.push_back(u);
-			
-			l = vc.size();
-
-			for (int k = 0; k < l; ++k) {
-				for (int m = k + 1; m < l; ++m) {
-					dimI = max(dimI, dist[vc[k]][vc[m]]); 
-				}
-			}
-
-			d2 = max(dimI, dimJ);
 			diameter = min(diameter, max(d1, d2));
 		}
 	}
