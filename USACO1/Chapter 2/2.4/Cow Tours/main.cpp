@@ -15,6 +15,7 @@ LANG: C++11
 #include <map> 
 #include <math.h>
 #include <queue>
+#include <set>
 #include <stdlib.h>
 #include <string>
 #include <sstream>
@@ -33,7 +34,8 @@ struct Point {
 
 int N; 
 double dist[151][151];
-Point pasture[152];
+double diameter[151];
+Point pasture[151];
 
 double distance(Point p, Point q) {
 	return pow(pow(p.x - q.x, 2) + pow(p.y - q.y, 2), 0.5);
@@ -71,6 +73,16 @@ int main()
 		}
 	}
 
+	/** 	Print the adjacency matrix */
+	// ofstream fout("cowtour.out");
+	// for (int i = 1; i <= N; ++i) {
+	// 		for (int j = 1; j <= N; ++j) {
+	// 			if (dist[i][j] == INF) fout << "*      ";
+	// 			else fout << dist[i][j] << "      ";
+	// 		}
+	// 	fout << endl;
+	// }
+
 	double diameter = INF;
 
 	for (int i = 1; i <= N; ++i) {
@@ -83,19 +95,81 @@ int main()
 				if (dist[i][k] != INF && dist[i][k] > l1) l1 = dist[i][k];
 				if (dist[j][k] != INF && dist[j][k] > l2) l2 = dist[j][k];
 			}
-			diameter = min(diameter, l1 + distance(pasture[i], pasture[j]) + l2);
-		}		
+
+			/** longest distance within pasture[i]'s group + that of pasture[j]'s group, + 
+			 * the distance between pasture[i] and pasture[j] */
+
+			double d1 = l1 + distance(pasture[i], pasture[j]) + l2; 
+
+			// COMPUTING d2 IS FAR TOO SLOW IN THE WORST CASE (the graph is very dense)
+
+
+			/** the maximum of the diameter of pasture[i]'s group and that of pasture[j] */
+			double d2 = INF, dimI = 0, dimJ = 0;
+
+			set<int> connected;
+			
+			bool visited[151];
+			queue<int> q;
+			q.push(i);
+			while(!q.empty()) {
+				int t = q.front();
+				q.pop();
+				if (visited[t]) continue;
+				visited[t] = true;
+				for (int k = 1; k <= N; ++k) {
+					if (dist[t][k] != INF) {
+						connected.insert(k); 
+						q.push(k);
+					}
+				}
+			}
+			// for (auto u : connected) cout << u << " ";
+			vector<int> vc;
+
+			for (auto u : connected) 
+				vc.push_back(u);
+			
+			int l = vc.size();
+			
+			for (int k = 0; k < l; ++k) {
+				for (int m = k + 1; m < l; ++m) {
+					dimI = max(dimI, dist[vc[k]][vc[m]]); 
+				}
+			}
+
+			for (int k = 1; k <= N; ++k) visited[k] = false;
+			connected.clear();
+			vc.clear();
+			q.push(j);
+			while(!q.empty()) {
+				int t = q.front();
+				q.pop();
+				if (visited[t]) continue;
+				visited[t] = true;
+				for (int k = 1; k <= N; ++k) {
+					if (dist[t][k] != INF) {
+						connected.insert(k); 
+						q.push(k);
+					}
+				}
+			}		
+
+			for (auto u : connected) 
+				vc.push_back(u);
+			
+			l = vc.size();
+
+			for (int k = 0; k < l; ++k) {
+				for (int m = k + 1; m < l; ++m) {
+					dimI = max(dimI, dist[vc[k]][vc[m]]); 
+				}
+			}
+
+			d2 = max(dimI, dimJ);
+			diameter = min(diameter, max(d1, d2));
+		}
 	}
-
-/** 	Print the adjacency matrix */
-
-	// for (int i = 1; i <= N; ++i) {
-	// 		for (int j = 1; j <= N; ++j) {
-	// 			if (dist[i][j] == INF) cout << "*      ";
-	// 			else cout << dist[i][j] << "      ";
-	// 		}
-	// 	cout << endl;
-	// }
 
 	fprintf(fout, "%0.6f\n", diameter); 
     return 0;
