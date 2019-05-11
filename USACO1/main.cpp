@@ -1,6 +1,6 @@
 /*
 ID: andreww7
-PROG: *PROGRAM NAME*
+PROG: agrinet
 LANG: C++
 */
 
@@ -22,11 +22,21 @@ LANG: C++
 
 using namespace std;
 
-FILE *fin = fopen("x.in", "r");
-FILE *fout = fopen("x.out", "w");
+ifstream fin("agrinet.in");
+ofstream fout("agrinet.out");
+
+int distance[101];
+int source[101];
+bool inTree[101];
+
+int N;
 
 int main()
 {
+    fin >> N;
 
+    for (int i = 0; i < N; i++) {
+
+    }
     return 0;
 }
