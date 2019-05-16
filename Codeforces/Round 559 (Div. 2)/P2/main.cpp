@@ -24,11 +24,12 @@ int main()
 {
     int N, k = INF;
     cin >> N;
-    for (int i = 0; i < N; ++i) {
+    for (int i = 1; i <= N; ++i) {
         cin >> arr[i];
-        for (int j = 0; j < i; ++j) {
-            k = (int) min((double) k, (min(arr[i], arr[j]) / (double) (i - j)));
-        }
+    }
+
+    for (int i = 1; i <= N; ++i) {
+        k = (int) min((double) k, arr[i] / ((double) max(N - i, i - 1)));
     }
 
     cout << k << endl;
