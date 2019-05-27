@@ -15,70 +15,38 @@ def main():
 	if m == 1:
 		print "YES"
 		return
-
-	intersection = []	
-	i = 2
-	if l[0][0] in l[1]:
-		intersection.append(l[0][0])
-	if l[0][1] in l[1]:
-		intersection.append(l[0][1])
-	while len(intersection) == 2 and i < m:
-		for item in intersection:
-			if item not in l[i]:
-				intersection.remove(item)
+	# l[0][0] is amongst x, y
+	a = l[0][0]
+	i = 1
+	while i < m and a in l[i]:
 		i += 1
-
-	if len(intersection) == 0:
-		print "NO"
-		return
-
-	if i == m:
-		if l[0][0] in l[i-1] or l[0][1] in l[i-1]:
-			print "YES"
-			return
-		print "NO"
-		return
 	
-	if len(intersection) == 2:
-		print "YES"
-		return 
-
-	# there's one item in the intersection, either it's x or y
-	x = intersection[0] 
-	j = i
-	while j < m and x in l[j]:
-		j += 1
-	if j == m:
+	if i == m:
 		print "YES"
 		return
-	y = l[j][0]
-	if y > x:
-		if contains(j, x, y):
-			print "YES"
-			return	
-	y = l[j][1]
-	if y > x:
-		if contains(j, x, y):
-			print "YES"
-			return
 
-	y = intersection[0]
-	j = i
-	while j < m and y in l[j]:
-		j += 1
-	if j == m:
+	if contains(i, a, l[i][0]) or contains(i, a, l[i][1]):
 		print "YES"
 		return
-	x = l[j][0]
-	if y > x: 
-		if contains(j, x, y):
-			print "YES"
-			return
-	x = l[j][1]
-	if y > x: 
-		if contains(j, x, y):
-			print "YES"
-			return	
+
+	#l[0][1] is amongst x, y
+	b = l[0][1]
+	i = 1
+	while i < m and b in l[i]:
+		i += 1
+	
+	if i == m:
+		print "YES"
+		return
+
+	if contains(i, l[i][0], b) or contains(i, l[i][1], b):
+		print "YES"
+		return
+
+	x = min(l[0]); y = max(l[0])
+	if contains(0, x, y):
+		print "YES"
+		return
 
 	print "NO"
 

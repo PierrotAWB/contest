@@ -3,10 +3,12 @@ d = a
 v = b
 meet = False
 while (d != x and v != y):
-	d = (d + 1)%n
-	v = (v - 1)%n
+	d += 1
+	v -= 1
 	if v == 0:
-		v += n
+		v = n
+	if d == n + 1:
+		d = 1
 	if v == d:
 		meet = True
 		break
