@@ -21,6 +21,7 @@ int ab[200001], bc[200001];
 
 // determine time if you cancel i earliest AB flights, and k - i BC flights
 int best(int i) {
+    // cout << "----------\ni: " << i << endl;
     int arrival = ab[i] + ta;
     int j = bopt;
     while (j < m) {
@@ -31,7 +32,8 @@ int best(int i) {
         }
         j++;
     }
-    if (j == m) return -1;
+    // cout << "Exited loop, j = " << j << endl;
+    if (j + k - i >= m) return -1;
     return bc[j + k - i] + tb;
 }
 
