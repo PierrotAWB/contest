@@ -22,13 +22,13 @@ int main() {
 	for (int i = 1; i <= n; ++i) {
 		if (p[i] == i) continue;
 
-		int ind = 0;
-		for (int j = 1; j <= n; ++j) {
-	    	if (p[j] == i) {
-				ind = j;
-				break;
-			}
-		}
+		int ind = distance(p, find(p, p + n, i));
+		// for (int j = 1; j <= n; ++j) {
+	    // 	if (p[j] == i) {
+		// 		ind = j;
+		// 		break;
+		// 	}
+		// }
 
 		if (abs(ind - i) >= n / 2) {
 			swap(ind, i);
