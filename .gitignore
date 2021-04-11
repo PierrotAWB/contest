@@ -1,2 +1,6 @@
 **/.vscode/
 **/.DS_Store
+
+# Everything after Problem 100 should not be put in a public repository.
+PE/Problem [0-9][0-9][0-9]
+
