@@ -1,0 +1,3 @@
+/home/andrew/Competitions/Programming/CodeForces/651/P1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/andrew/Competitions/Programming/CodeForces/651/P1/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/andrew/Competitions/Programming/CodeForces/651/P1/cmake-build-debug/CMakeFiles/P1.dir
