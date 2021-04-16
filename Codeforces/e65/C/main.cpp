@@ -6,13 +6,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-vector<int> parent, sze;
-
-int find_set(int v) {
-	if (parent[v] == v)
-		return v;
-	return parent[v] = find_set(parent[v]);
-}
 
 int main() {
 	ios::sync_with_stdio(false);	
@@ -20,12 +13,17 @@ int main() {
 	int n, m, ki, first, other;
 	cin >> n >> m;
 
-	parent.reserve(n + 1);
-	sze.reserve(n + 1);
+	vector<int> parent(n + 1), sze(n + 1);
 
 	auto make_set = [&](int v) {
 		parent[v] = v;
 		sze[v] = 1;
+	};
+
+	function<int(int)> find_set = [&](int v) {
+		if (parent[v] == v)
+			return v;
+		return parent[v] = find_set(parent[v]);
 	};
 
 	auto union_sets = [&](int a, int b) {
