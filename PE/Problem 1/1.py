@@ -1,12 +1,13 @@
+#! /usr/bin/env python3
+
 # If we list all the natural numbers below 10 that are multiples of 3 or 5, we get 3, 5, 6 and 9. The sum of these multiples is 23.
 
 # Find the sum of all the multiples of 3 or 5 below 1000.
 
 # 2016-12-29
-
 def calcSum(n): 
-	upper_bound = 999 / n
-	result = n * upper_bound * (upper_bound + 1) / 2
+	upper_bound = 999 // n
+	result = n * upper_bound * (upper_bound + 1) // 2
 	return result 
 
-print calcSum(3) + calcSum(5) - calcSum(15)
+print(calcSum(3) + calcSum(5) - calcSum(15))
