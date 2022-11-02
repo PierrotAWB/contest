@@ -1,10 +1,11 @@
 /**
  *    author: awb29
- *    created: Wed Nov  2 11:28:05 AM PDT 2022
+ *    created: Wed Nov  2 01:40:04 PM PDT 2022
 **/
 
 #include <bits/stdc++.h>
 using namespace std;
+char a[600001];
 
 int main() {
 	ios::sync_with_stdio(false);
@@ -12,31 +13,16 @@ int main() {
 	int tt;
 	cin >> tt;
 	while (tt--) {
-		int n;
+		int n, last = -10000, ans = 0;
 		char c;
-		string s;
-		cin >> n >> c >> s;
-		s.append(s);
-
-		if (c == 'g') {
-			cout << "0\n";
-			continue;
+		cin >> n >> c;
+		cin >> (a + 1);
+		for (int i = 1; i <= n; ++i) a[i + n] = a[i];
+		for (int i = 2*n; i >= 0; --i) {
+			if (a[i] == 'g') last = i;
+			else if (a[i] == c) ans = max(ans, last - i);
 		}
-
-		vector<int> g, cv;
-		for (int i = 0; i < 2*n; ++i) {
-			if (s.at(i) == 'g') g.push_back(i);
-			else if (s.at(i) == c) cv.push_back(i);
-		}
-
-		int best = -1;
-		for (auto u : cv) {
-			int next = *upper_bound(g.begin(), g.end() - 1, u);
-			/* cout << "DEBUG: " << u << " " << next << endl; */
-			best = max(best, next - u);
-		}
-
-		cout << best << '\n';
+		cout << ans << '\n';
 	}
 	return 0;
 }
