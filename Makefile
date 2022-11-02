@@ -13,11 +13,9 @@ clean :
 	rm -f main
 
 test :
-	touch input.in output.out
 	./main < input.in > output.out
 
 run :
-	touch input.in output.out
 	./main < input.in > output.out
 
-.PHONY: all main clean dist
+.PHONY: all main clean dist test run
