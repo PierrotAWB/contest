@@ -1,0 +1,69 @@
+# too slow.
+
+from sys import base_exec_prefix
+
+
+dirs = [(1, 0), (0, 1)]
+
+def solve():
+    # r = 1000; c = 1000
+    # arr = [[1000 for _ in range(1000)] for _ in range(1000)]
+    r, c = list(map(int, input().split(' ')))
+    arr = []
+
+    for _ in range(r):
+        arr.append(list(map(int, input().split(' '))))
+
+    parent = [0] * (r * c)
+    size = [0] * (r * c)
+    volume = [0] * (r * c)
+
+    # Union find
+    def make_set(v, vol):
+        parent[v] = v
+        size[v] = 1
+        volume[v] = vol
+
+    def find_set(v):
+        if v == parent[v]:
+            return v
+        ret = find_set(parent[v])
+        parent[v] = ret
+        return ret
+
+    def union_sets(a, b):
+        a = find_set(a)
+        b = find_set(b)
+        if a != b:
+            if size[b] > size[a]:
+                a, b = b, a
+            parent[b] = a
+            size[a] += size[b]
+            volume[a] += volume[b]
+
+    for i in range(r):
+        for j in range(c):
+            make_set(i * c + j, arr[i][j])
+
+    for i in range(r):
+        for j in range(c):
+            if arr[i][j] == 0:
+                continue
+            for d in dirs:
+                p, q = i + d[0], j + d[1]
+                if 0 <= p < r and 0 <= q < c and arr[p][q] != 0:
+                    union_sets(i * c + j, p * c + q)
+
+    best = -1
+    for i in range(r):
+        for j in range(c):
+            if parent[i*c + j] == i*c + j:
+                best = max(best, volume[i*c + j])
+    print(best)
+
+
+if __name__ == "__main__":
+    # t = int(input())
+    t = 10000
+    for _ in range(t):
+        solve()
