@@ -11,7 +11,7 @@
 #define M 1000000007
 using namespace std;
 
-int count_set_bits(int k) {
+int pop_count(int k) {
 	int ret = 0;
 	while (k > 0) {
 		ret += k & 1;
@@ -38,7 +38,7 @@ void solve() {
 	}
 	int acc = 0;
 	for (int mask = 0; mask < N_BIN; ++mask) {
-		if (k == count_set_bits(mask)) {
+		if (k == pop_count(mask)) {
 			acc = (acc + dp[n][mask]) % M;
 		}
 	}
